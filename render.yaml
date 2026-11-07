@@ -1,0 +1,18 @@
+# Blueprint de Render, variante GRATUITA para demostración.
+# El disco gratuito es efímero: los datos se pierden cuando el servicio se reinicia o se duerme.
+# Con DEMO=1 los datos y usuarios de ejemplo se recrean solos en cada arranque.
+services:
+  - type: web
+    name: bienestar-ica
+    runtime: node
+    plan: free
+    buildCommand: npm install --omit=dev
+    startCommand: node server.js
+    healthCheckPath: /salud
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: DEMO
+        value: "1"

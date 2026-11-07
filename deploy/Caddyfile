@@ -1,0 +1,4 @@
+# Cambie tudominio.com por su dominio (debe apuntar a la IP del servidor)
+tudominio.com {
+  reverse_proxy app:3000
+}

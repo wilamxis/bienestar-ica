@@ -1,0 +1,1430 @@
+{
+ "nombre": "Metodología ICA para patos y gansos",
+ "fuente": "ICA 2024 v1.0",
+ "umbralGrande": 200,
+ "pesos": {
+  "grande": {
+   "MBA": 60,
+   "MBR": 25,
+   "MBG": 15
+  },
+  "traspatio": {
+   "MBA": 70,
+   "MBR": 30,
+   "MBG": 0
+  }
+ },
+ "umbrales": [
+  [
+   90,
+   "Excelente"
+  ],
+  [
+   75,
+   "Alto"
+  ],
+  [
+   50,
+   "Medio"
+  ],
+  [
+   0,
+   "Bajo"
+  ]
+ ],
+ "zonaSensible": 3,
+ "densidad": [
+  [
+   1.5,
+   17
+  ],
+  [
+   2,
+   18
+  ],
+  [
+   2.5,
+   20
+  ],
+  [
+   3,
+   21
+  ],
+  [
+   3.5,
+   22
+  ],
+  [
+   4,
+   23
+  ],
+  [
+   4.5,
+   24
+  ]
+ ],
+ "indicadores": [
+  {
+   "id": "p_aloj",
+   "sp": "pato",
+   "g": "MBR",
+   "n": "Alojamiento",
+   "ref": "Tabla 5",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Alojamiento con refugio y protección, equipado (comederos, bebederos, nidales), limpio, sin humedad y con rampas a las perchas"
+    ],
+    [
+     55,
+     "Alojamiento con refugio y protección, pero sin equipamiento, húmedo o con materia fecal acumulada"
+    ],
+    [
+     0,
+     "No hay ninguna instalación de alojamiento o refugio"
+    ]
+   ]
+  },
+  {
+   "id": "p_cama",
+   "sp": "pato",
+   "g": "MBR",
+   "n": "Calidad de la cama",
+   "ref": "Tabla 6",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "El material no se compacta o es granuloso y se desmorona con facilidad"
+    ],
+    [
+     55,
+     "El material está ligeramente compactado por humedad"
+    ],
+    [
+     0,
+     "Muy compacto por humedad o hay líquido en la mano del evaluador"
+    ]
+   ],
+   "aplica": [
+    {
+     "campo": "corral",
+     "igual": true,
+     "motivo": "Solo aplica si hay galpón o corral con cama en el piso"
+    },
+    {
+     "campo": "cama",
+     "igual": true,
+     "motivo": "Solo aplica si hay galpón o corral con cama en el piso"
+    }
+   ]
+  },
+  {
+   "id": "p_bebint",
+   "sp": "pato",
+   "g": "MBR",
+   "n": "Integridad de los bebederos",
+   "ref": "Tabla 7",
+   "t": "pct",
+   "un": "% de bebederos que cumplen",
+   "esc": "% de bebederos que cumplen: altura adecuada, sin derrames, limpios, íntegros y funcionales. ≥ 80 % = 100 · 40 a 79 % = 55 · < 40 % o sin bebederos = 0",
+   "escala": [
+    {
+     "desde": 80,
+     "pts": 100
+    },
+    {
+     "desde": 40,
+     "pts": 55
+    },
+    {
+     "pts": 0
+    }
+   ]
+  },
+  {
+   "id": "p_bebanim",
+   "sp": "pato",
+   "g": "MBR",
+   "n": "Animales por bebedero",
+   "ref": "Tabla 8",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Relación adecuada de animales por bebedero; no hay competencia por el agua"
+    ],
+    [
+     55,
+     "Se excede la relación recomendada, pero no se evidencia competencia por el agua"
+    ],
+    [
+     0,
+     "Se excede la relación en más de 30 % y hay competencia por el agua"
+    ]
+   ]
+  },
+  {
+   "id": "p_bebagua",
+   "sp": "pato",
+   "g": "MBR",
+   "n": "Suministro de agua en los bebederos",
+   "ref": "Tabla 9",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Los bebederos tienen agua suficiente; presión y flujo constantes si son automatizados"
+    ],
+    [
+     55,
+     "Agua insuficiente, o presión/flujo fluctuante o goteo"
+    ],
+    [
+     0,
+     "No hay suministro de agua en los bebederos"
+    ]
+   ]
+  },
+  {
+   "id": "p_calagua",
+   "sp": "pato",
+   "g": "MBR",
+   "n": "Calidad del agua de bebida",
+   "ref": "Tabla 10",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Fuentes y tanques limpios y aptos; protocolo de tratamiento implementado con soportes y recursos funcionales"
+    ],
+    [
+     55,
+     "Recursos funcionales y registros, pero sin protocolo escrito o incompleto"
+    ],
+    [
+     0,
+     "Sin infraestructura o registros, recursos no funcionales o agua sucia"
+    ]
+   ]
+  },
+  {
+   "id": "p_comcal",
+   "sp": "pato",
+   "g": "MBR",
+   "n": "Calidad de los comederos",
+   "ref": "Tabla 11",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Altura suficiente para comer cómodamente; comedero íntegro y limpio"
+    ],
+    [
+     55,
+     "Altura suficiente, pero comedero no íntegro, deteriorado, sucio o expuesto al sol"
+    ],
+    [
+     0,
+     "Altura insuficiente para alimentarse cómodamente"
+    ]
+   ]
+  },
+  {
+   "id": "p_comanim",
+   "sp": "pato",
+   "g": "MBR",
+   "n": "Animales por comedero",
+   "ref": "Tabla 12",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Relación adecuada de animales por comedero; no hay competencia por el alimento"
+    ],
+    [
+     55,
+     "Se excede la relación recomendada, pero no se evidencia competencia por el alimento"
+    ],
+    [
+     0,
+     "Se excede la relación en más de 30 % y hay competencia por el alimento"
+    ]
+   ]
+  },
+  {
+   "id": "p_termico",
+   "sp": "pato",
+   "g": "MBR",
+   "n": "Medios para contribuir al confort térmico",
+   "ref": "Tabla 13",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Infraestructura, equipos e insumos existen, son funcionales y están declarados en el POE"
+    ],
+    [
+     55,
+     "Existen y son funcionales, pero no están declarados en el POE"
+    ],
+    [
+     0,
+     "No existen o no son funcionales"
+    ]
+   ]
+  },
+  {
+   "id": "p_nidal",
+   "sp": "pato",
+   "g": "MBR",
+   "n": "Calidad, integridad y funcionalidad del nidal",
+   "ref": "Tabla 14",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Nidales íntegros (individuales o colectivos) y con cama"
+    ],
+    [
+     55,
+     "Condiciones no ideales (sin cama, envejecidos, sin aislamiento visual) pero funcionales"
+    ],
+    [
+     0,
+     "No hay nidales, o están en mal estado o fracturados"
+    ]
+   ],
+   "aplica": [
+    {
+     "campo": "proposito",
+     "distinto": "carne",
+     "motivo": "El nidal no aplica a patos de carne"
+    }
+   ]
+  },
+  {
+   "id": "p_espacio",
+   "sp": "pato",
+   "g": "MBR",
+   "n": "Espacio disponible (densidad)",
+   "ref": "Sección 6.1.11",
+   "t": "dens",
+   "esc": "La densidad real (kg/m²) no debe superar la permitida para el peso de las aves: 1,5 kg = 17 · 2 = 18 · 2,5 = 20 · 3 = 21 · 3,5 = 22 · 4 = 23 · 4,5 = 24"
+  },
+  {
+   "id": "p_poceta",
+   "sp": "pato",
+   "g": "MBR",
+   "n": "Pocetas, estanques o lagos",
+   "ref": "Tabla 16",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Espacio para nadar de al menos 10 cm de profundidad, con rampas de entrada y salida y sin encharcamientos"
+    ],
+    [
+     55,
+     "Espacio para nadar de al menos 10 cm, pero sin rampas o con encharcamientos"
+    ],
+    [
+     0,
+     "No hay un lugar donde los patos puedan nadar"
+    ]
+   ]
+  },
+  {
+   "id": "p_jadeo",
+   "sp": "pato",
+   "g": "MBA",
+   "n": "Jadeo",
+   "ref": "Tabla 17",
+   "t": "pct",
+   "un": "% de aves con jadeo",
+   "esc": "% de aves con jadeo. ≤ 40 % = 100 · 41 a 60 % = 55 · > 60 % = 0",
+   "escala": [
+    {
+     "hasta": 40,
+     "pts": 100
+    },
+    {
+     "hasta": 60,
+     "pts": 55
+    },
+    {
+     "pts": 0
+    }
+   ],
+   "aplica": [
+    {
+     "campo": "corral",
+     "igual": true,
+     "motivo": "Solo aplica si las aves permanecen en galpón o corral"
+    }
+   ]
+  },
+  {
+   "id": "p_amont",
+   "sp": "pato",
+   "g": "MBA",
+   "n": "Acurrucarse en grupos (amontonamiento)",
+   "ref": "Tabla 18",
+   "t": "pct",
+   "un": "% de aves amontonadas",
+   "esc": "% de aves amontonadas. ≤ 40 % = 100 · 41 a 60 % = 55 · > 60 % = 0",
+   "escala": [
+    {
+     "hasta": 40,
+     "pts": 100
+    },
+    {
+     "hasta": 60,
+     "pts": 55
+    },
+    {
+     "pts": 0
+    }
+   ]
+  },
+  {
+   "id": "p_quilla",
+   "sp": "pato",
+   "g": "MBA",
+   "n": "Integridad del hueso de la quilla",
+   "ref": "Tabla 19",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Ausente: sin anormalidades en la quilla"
+    ],
+    [
+     55,
+     "Leve: indicios de desviación (fractura, callosidad o curvatura)"
+    ],
+    [
+     0,
+     "Severa: desviación visible y palpable"
+    ]
+   ]
+  },
+  {
+   "id": "p_podo",
+   "sp": "pato",
+   "g": "MBA",
+   "n": "Podo dermatitis",
+   "ref": "Tabla 20",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Ausente: sin inflamación, lesiones ni dolor en la almohadilla o membrana interdigital"
+    ],
+    [
+     55,
+     "Leve: heridas o inflamación leve, sin señales de dolor"
+    ],
+    [
+     0,
+     "Severa: fibromas o inflamación severa con señales de dolor"
+    ]
+   ]
+  },
+  {
+   "id": "p_dedos",
+   "sp": "pato",
+   "g": "MBA",
+   "n": "Daño en los dedos",
+   "ref": "Tabla 21",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Sin anormalidades ni pérdida de integridad en los dedos"
+    ],
+    [
+     55,
+     "Heridas, inflamaciones o amputaciones sin señales de dolor"
+    ],
+    [
+     0,
+     "Heridas, inflamaciones o amputaciones con señales de dolor"
+    ]
+   ]
+  },
+  {
+   "id": "p_piel",
+   "sp": "pato",
+   "g": "MBA",
+   "n": "Lesiones en piel y otros tegumentos",
+   "ref": "Tabla 22",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Sin lesiones, o hasta 2 rasguños o lesiones activas menores de 0,5 cm; sin prolapso"
+    ],
+    [
+     55,
+     "Una lesión de 0,5 a 2 cm, o 3 o más rasguños menores de 0,5 cm; sin prolapso"
+    ],
+    [
+     0,
+     "Una o más lesiones de 2 cm o más, o prolapso en cloaca"
+    ]
+   ]
+  },
+  {
+   "id": "p_plumaje",
+   "sp": "pato",
+   "g": "MBA",
+   "n": "Suciedad y apariencia del plumaje",
+   "ref": "Tabla 23",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Plumaje homogéneo, ordenado y sin áreas desprovistas (sin contar la suciedad de la cloaca)"
+    ],
+    [
+     55,
+     "Algunas zonas con plumas quebradas, desordenadas o sin brillo"
+    ],
+    [
+     0,
+     "Plumaje no acorde a la raza, erizado o con pérdida de continuidad"
+    ]
+   ]
+  },
+  {
+   "id": "p_oculo",
+   "sp": "pato",
+   "g": "MBA",
+   "n": "Integridad óculo-nasal",
+   "ref": "Tabla 24",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Sin descargas, carnosidades ni lesiones en ojos y nariz"
+    ],
+    [
+     55,
+     "Hay descarga nasal u ocular (alguna de las dos), sin lesiones"
+    ],
+    [
+     0,
+     "Descarga nasal y ocular, carnosidades o lesiones agudas o crónicas"
+    ]
+   ]
+  },
+  {
+   "id": "p_pico",
+   "sp": "pato",
+   "g": "MBA",
+   "n": "Condición del pico",
+   "ref": "Tabla 25",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Sin lesiones de ningún tipo"
+    ],
+    [
+     55,
+     "Una lesión que no causa dolor ni impide comer o acicalarse"
+    ],
+    [
+     0,
+     "Lesiones que causan dolor"
+    ]
+   ]
+  },
+  {
+   "id": "p_mort",
+   "sp": "pato",
+   "g": "MBA",
+   "n": "Mortalidad acumulada (últimos 5 ciclos)",
+   "ref": "Tabla 26",
+   "t": "pct",
+   "un": "% de mortalidad acumulada",
+   "esc": "Supuesto del MVP (la Tabla 26 es contradictoria): ≤ 12 % = 100 · 12 a 14 % = 55 · > 14 % = 0",
+   "escala": [
+    {
+     "hasta": 12,
+     "pts": 100
+    },
+    {
+     "hasta": 14,
+     "pts": 55
+    },
+    {
+     "pts": 0
+    }
+   ],
+   "aplica": [
+    {
+     "campo": "nAves",
+     "min": 200,
+     "motivo": "Solo se evalúa en predios de 200 aves o más"
+    }
+   ]
+  },
+  {
+   "id": "p_cc",
+   "sp": "pato",
+   "g": "MBA",
+   "n": "Condición corporal",
+   "ref": "Tablas 27 y 28",
+   "t": "cc",
+   "esc": "Escala 1 (delgado) a 5 (sobrepeso). Carne: 3 o 4 = 100 · 2 = 55 · 1 o 5 = 0. Huevo: 2 o 3 = 100 · 4 = 55 (supuesto) · 1 o 5 = 0",
+   "tabla": {
+    "carne": {
+     "1": 0,
+     "2": 55,
+     "3": 100,
+     "4": 100,
+     "5": 0
+    },
+    "huevo": {
+     "1": 0,
+     "2": 100,
+     "3": 100,
+     "4": 55,
+     "5": 0
+    }
+   }
+  },
+  {
+   "id": "p_g_agua",
+   "sp": "pato",
+   "g": "MBG",
+   "n": "Calidad del agua de bebida (análisis)",
+   "ref": "Tabla 29",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Certificado de análisis fisicoquímico y microbiológico vigente (1 año), de laboratorio autorizado, con medidas correctivas si hubo hallazgos"
+    ],
+    [
+     0,
+     "Sin análisis, certificado vencido o sin medidas correctivas"
+    ]
+   ],
+   "doc": true
+  },
+  {
+   "id": "p_g_alim",
+   "sp": "pato",
+   "g": "MBG",
+   "n": "Alimentación equilibrada",
+   "ref": "Tabla 30",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Soporte del alimento acorde a la etapa fisiológica, de una planta registrada ante el ICA"
+    ],
+    [
+     0,
+     "Sin documento que demuestre que el alimento es apropiado"
+    ]
+   ],
+   "doc": true
+  },
+  {
+   "id": "p_g_vigil",
+   "sp": "pato",
+   "g": "MBG",
+   "n": "Programas de vigilancia y gestión sanitaria",
+   "ref": "Tabla 31",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Existe plan o procedimiento para el control y erradicación de enfermedades de control oficial"
+    ],
+    [
+     0,
+     "No existe"
+    ]
+   ],
+   "doc": true
+  },
+  {
+   "id": "p_g_poe",
+   "sp": "pato",
+   "g": "MBG",
+   "n": "POE de bienestar animal",
+   "ref": "Tabla 32",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "POE con plan de vacunación, densidades, manejo de enfermos y reducción del dolor, firmado por MV, MVZ o Z con matrícula vigente"
+    ],
+    [
+     0,
+     "Sin el contenido mínimo o sin firma profesional"
+    ]
+   ],
+   "doc": true
+  },
+  {
+   "id": "p_g_term",
+   "sp": "pato",
+   "g": "MBG",
+   "n": "Condiciones térmicas diarias y manejo de emergencias",
+   "ref": "Tabla 33",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Protocolo de emergencias térmicas dentro del POE, elaborado por profesional con matrícula"
+    ],
+    [
+     0,
+     "No existe o incumple los requisitos"
+    ]
+   ],
+   "doc": true
+  },
+  {
+   "id": "p_g_ilum",
+   "sp": "pato",
+   "g": "MBG",
+   "n": "Programa de iluminación",
+   "ref": "Tabla 34",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Programa luz-oscuridad de 24 horas y protocolo ante cambios abruptos, firmado por profesional"
+    ],
+    [
+     0,
+     "Sin evidencia documental"
+    ]
+   ],
+   "doc": true
+  },
+  {
+   "id": "p_g_cap",
+   "sp": "pato",
+   "g": "MBG",
+   "n": "Capacitación básica en bienestar animal",
+   "ref": "Tabla 35",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Todo el personal tiene certificado de curso de bienestar animal (ICA, SENA o entidad autorizada)"
+    ],
+    [
+     0,
+     "Sin evidencia o personal sin certificar"
+    ]
+   ],
+   "doc": true
+  },
+  {
+   "id": "p_g_euta",
+   "sp": "pato",
+   "g": "MBG",
+   "n": "Protocolo de sacrificio humanitario o eutanasia",
+   "ref": "Tabla 36",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Protocolo basado en el título 7 del Código Sanitario de la OMSA, firmado por profesional con matrícula"
+    ],
+    [
+     0,
+     "No existe o no cumple"
+    ]
+   ],
+   "doc": true
+  },
+  {
+   "id": "p_g_capeuta",
+   "sp": "pato",
+   "g": "MBG",
+   "n": "Capacitación en técnicas de sacrificio humanitario",
+   "ref": "Tabla 37",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Personal capacitado, o MV/MVZ con matrícula vigente responsable de la eutanasia"
+    ],
+    [
+     0,
+     "Sin evidencia de capacitación"
+    ]
+   ],
+   "doc": true
+  },
+  {
+   "id": "p_g_med",
+   "sp": "pato",
+   "g": "MBG",
+   "n": "Uso responsable de medicamentos veterinarios",
+   "ref": "Tabla 38",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Se cumplen todas las buenas prácticas (BPUMV)"
+    ],
+    [
+     55,
+     "Mínimo: registro ICA, prescripción MV/MVZ, registro de tratamientos y sin medicamentos vencidos"
+    ],
+    [
+     0,
+     "Medicamentos sin registro ICA, sustancias prohibidas, sin prescripción o sin registros"
+    ]
+   ],
+   "doc": true
+  },
+  {
+   "id": "g_alim",
+   "sp": "ganso",
+   "g": "MBR",
+   "n": "Suministro de alimento",
+   "ref": "Tabla 40",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Alimento en buen estado, dieta balanceada por zootecnista o nutricionista, con registro ICA y buen almacenamiento"
+    ],
+    [
+     55,
+     "Sin dieta balanceada por profesional, pero alimento en buenas condiciones y adecuado a la especie"
+    ],
+    [
+     0,
+     "Alimento en malas condiciones o inadecuado, sin registro ICA o mal almacenado"
+    ]
+   ]
+  },
+  {
+   "id": "g_agua",
+   "sp": "ganso",
+   "g": "MBR",
+   "n": "Suministro y acceso al agua",
+   "ref": "Tabla 41",
+   "t": "pct",
+   "un": "% de gansos con acceso permanente",
+   "esc": "% de gansos evaluados con acceso permanente al agua. 100 % = 100 · ≥ 80 % = 55 · < 80 % = 0",
+   "escala": [
+    {
+     "desde": 100,
+     "pts": 100
+    },
+    {
+     "desde": 80,
+     "pts": 55
+    },
+    {
+     "pts": 0
+    }
+   ]
+  },
+  {
+   "id": "g_comed",
+   "sp": "ganso",
+   "g": "MBR",
+   "n": "Estado y limpieza de los comederos",
+   "ref": "Tabla 42",
+   "t": "pct",
+   "un": "% de comederos en buen estado",
+   "esc": "% de comederos en buen estado, limpios y sin riesgo de lesión. 100 % = 100 · ≥ 80 % = 55 · 60 a 79 % = 20 · < 60 % = 0",
+   "escala": [
+    {
+     "desde": 100,
+     "pts": 100
+    },
+    {
+     "desde": 80,
+     "pts": 55
+    },
+    {
+     "desde": 60,
+     "pts": 20
+    },
+    {
+     "pts": 0
+    }
+   ]
+  },
+  {
+   "id": "g_bebed",
+   "sp": "ganso",
+   "g": "MBR",
+   "n": "Estado y limpieza de los bebederos",
+   "ref": "Tabla 43",
+   "t": "pct",
+   "un": "% de bebederos en buen estado",
+   "esc": "% de bebederos en buen estado, limpios y sin riesgo de lesión. 100 % = 100 · ≥ 80 % = 55 · 60 a 79 % = 20 · < 60 % = 0",
+   "escala": [
+    {
+     "desde": 100,
+     "pts": 100
+    },
+    {
+     "desde": 80,
+     "pts": 55
+    },
+    {
+     "desde": 60,
+     "pts": 20
+    },
+    {
+     "pts": 0
+    }
+   ]
+  },
+  {
+   "id": "g_limp",
+   "sp": "ganso",
+   "g": "MBR",
+   "n": "Limpieza del galpón o potrero",
+   "ref": "Tabla 44",
+   "t": "pct",
+   "un": "% de galpones o potreros con elementos de riesgo",
+   "esc": "Supuesto del MVP (la Tabla 44 está invertida): % de galpones o potreros con elementos de riesgo. 0 % = 100 · < 20 % = 55 · 20 a 40 % = 20 · > 40 % = 0",
+   "escala": [
+    {
+     "hasta": 0,
+     "pts": 100
+    },
+    {
+     "menor": 20,
+     "pts": 55
+    },
+    {
+     "hasta": 40,
+     "pts": 20
+    },
+    {
+     "pts": 0
+    }
+   ]
+  },
+  {
+   "id": "g_estanque",
+   "sp": "ganso",
+   "g": "MBR",
+   "n": "Presencia de estanques, lagos o espejos de agua",
+   "ref": "Tabla 45",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Los gansos tienen acceso permanente a estanques, lagos o espejos de agua"
+    ],
+    [
+     0,
+     "No tienen acceso"
+    ]
+   ]
+  },
+  {
+   "id": "g_protec",
+   "sp": "ganso",
+   "g": "MBR",
+   "n": "Protección ante condiciones ambientales",
+   "ref": "Tabla 46",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Las instalaciones o refugios protegen del clima y de los depredadores"
+    ],
+    [
+     0,
+     "No hay instalaciones o refugios que protejan"
+    ]
+   ]
+  },
+  {
+   "id": "g_heridas",
+   "sp": "ganso",
+   "g": "MBA",
+   "n": "Heridas o lesiones graves o profundas",
+   "ref": "Tabla 47",
+   "t": "pct",
+   "un": "% de gansos con heridas graves o profundas",
+   "esc": "Supuesto del MVP: 0 % = 100 · ≤ 15 % con tratamiento = 55 · ≤ 15 % sin tratar o 16 a 20 % = 20 · > 20 % = 0",
+   "escala": [
+    {
+     "hasta": 0,
+     "pts": 100
+    },
+    {
+     "hasta": 15,
+     "x": true,
+     "pts": 55
+    },
+    {
+     "hasta": 20,
+     "pts": 20
+    },
+    {
+     "pts": 0
+    }
+   ],
+   "usaX": true,
+   "etiquetaX": "Hay evidencia de tratamiento"
+  },
+  {
+   "id": "g_plumaje",
+   "sp": "ganso",
+   "g": "MBA",
+   "n": "Apariencia del plumaje",
+   "ref": "Tabla 48",
+   "t": "pct",
+   "un": "% de gansos con plumaje inadecuado",
+   "esc": "% de gansos con plumaje inadecuado. 0 % = 100 · ≤ 40 % = 55 · > 40 % = 0",
+   "escala": [
+    {
+     "hasta": 0,
+     "pts": 100
+    },
+    {
+     "hasta": 40,
+     "pts": 55
+    },
+    {
+     "pts": 0
+    }
+   ]
+  },
+  {
+   "id": "g_podo",
+   "sp": "ganso",
+   "g": "MBA",
+   "n": "Podo dermatitis plantar",
+   "ref": "Tabla 49",
+   "t": "pct",
+   "un": "% de gansos con podo dermatitis",
+   "esc": "0 % = 100 · < 20 % con tratamiento = 55 · < 20 % sin tratar o ≥ 20 % con tratamiento = 20 · ≥ 20 % sin tratar = 0 (supuesto en los casos no definidos)",
+   "escala": [
+    {
+     "hasta": 0,
+     "pts": 100
+    },
+    {
+     "menor": 20,
+     "x": true,
+     "pts": 55
+    },
+    {
+     "menor": 20,
+     "pts": 20
+    },
+    {
+     "x": true,
+     "pts": 20
+    },
+    {
+     "pts": 0
+    }
+   ],
+   "usaX": true,
+   "etiquetaX": "Hay evidencia de tratamiento"
+  },
+  {
+   "id": "g_diarrea",
+   "sp": "ganso",
+   "g": "MBA",
+   "n": "Presencia de diarrea",
+   "ref": "Tabla 50",
+   "t": "pct",
+   "un": "% de gansos con diarrea",
+   "esc": "0 % = 100 · ≤ 10 % con tratamiento = 55 · > 10 % con tratamiento = 20 · > 10 % sin tratar = 0 (supuesto: ≤ 10 % sin tratar = 20)",
+   "escala": [
+    {
+     "hasta": 0,
+     "pts": 100
+    },
+    {
+     "hasta": 10,
+     "x": true,
+     "pts": 55
+    },
+    {
+     "hasta": 10,
+     "pts": 20
+    },
+    {
+     "x": true,
+     "pts": 20
+    },
+    {
+     "pts": 0
+    }
+   ],
+   "usaX": true,
+   "etiquetaX": "Hay evidencia de tratamiento"
+  },
+  {
+   "id": "g_pico",
+   "sp": "ganso",
+   "g": "MBA",
+   "n": "Condición del pico",
+   "ref": "Tabla 51",
+   "t": "pct",
+   "un": "% de gansos con lesiones en el pico",
+   "esc": "% de gansos con lesiones en el pico. 0 % = 100 · ≤ 6 % = 55 · 6 a 8 % = 20 · > 8 % = 0",
+   "escala": [
+    {
+     "hasta": 0,
+     "pts": 100
+    },
+    {
+     "hasta": 6,
+     "pts": 55
+    },
+    {
+     "hasta": 8,
+     "pts": 20
+    },
+    {
+     "pts": 0
+    }
+   ]
+  },
+  {
+   "id": "g_cojos",
+   "sp": "ganso",
+   "g": "MBA",
+   "n": "Animales cojos",
+   "ref": "Tabla 52",
+   "t": "pct",
+   "un": "% de gansos cojos",
+   "esc": "% de gansos cojos. < 3 % = 100 · 3 a 6 % = 55 · 6 a 8 % = 20 · > 8 % = 0 (se cierra el hueco 3–4 % de la Tabla 52)",
+   "escala": [
+    {
+     "menor": 3,
+     "pts": 100
+    },
+    {
+     "hasta": 6,
+     "pts": 55
+    },
+    {
+     "hasta": 8,
+     "pts": 20
+    },
+    {
+     "pts": 0
+    }
+   ]
+  },
+  {
+   "id": "g_secrec",
+   "sp": "ganso",
+   "g": "MBA",
+   "n": "Secreciones oculares o conjuntivitis",
+   "ref": "Tabla 53",
+   "t": "pct",
+   "un": "% de gansos con secreciones o conjuntivitis",
+   "esc": "0 % = 100 · ≤ 10 % con tratamiento = 55 · > 10 % con tratamiento = 20 · > 10 % sin tratar = 0 (supuesto: ≤ 10 % sin tratar = 20)",
+   "escala": [
+    {
+     "hasta": 0,
+     "pts": 100
+    },
+    {
+     "hasta": 10,
+     "x": true,
+     "pts": 55
+    },
+    {
+     "hasta": 10,
+     "pts": 20
+    },
+    {
+     "x": true,
+     "pts": 20
+    },
+    {
+     "pts": 0
+    }
+   ],
+   "usaX": true,
+   "etiquetaX": "Hay evidencia de tratamiento"
+  },
+  {
+   "id": "g_agres",
+   "sp": "ganso",
+   "g": "MBA",
+   "n": "Agresiones intraespecíficas",
+   "ref": "Tabla 54",
+   "t": "pct",
+   "un": "% de gansos con agresiones",
+   "esc": "% de gansos agresivos con otros gansos. < 5 % = 100 · 5 a 8 % = 55 · 8 a 10 % = 20 · > 10 % = 0",
+   "escala": [
+    {
+     "menor": 5,
+     "pts": 100
+    },
+    {
+     "hasta": 8,
+     "pts": 55
+    },
+    {
+     "hasta": 10,
+     "pts": 20
+    },
+    {
+     "pts": 0
+    }
+   ]
+  },
+  {
+   "id": "g_humano",
+   "sp": "ganso",
+   "g": "MBA",
+   "n": "Interacción negativa con el humano",
+   "ref": "Tabla 55",
+   "t": "pct",
+   "un": "% de gansos con conductas agresivas hacia el humano",
+   "esc": "% de gansos agresivos con el evaluador. < 3 % = 100 · 3 a 6 % = 55 · 6 a 8 % = 20 · > 8 % = 0",
+   "escala": [
+    {
+     "menor": 3,
+     "pts": 100
+    },
+    {
+     "hasta": 6,
+     "pts": 55
+    },
+    {
+     "hasta": 8,
+     "pts": 20
+    },
+    {
+     "pts": 0
+    }
+   ]
+  },
+  {
+   "id": "g_posit",
+   "sp": "ganso",
+   "g": "MBA",
+   "n": "Valoración de comportamientos positivos",
+   "ref": "Tabla 56",
+   "t": "pct",
+   "un": "% de gansos con comportamientos positivos",
+   "esc": "% de gansos con comportamientos positivos (observar mínimo 5 minutos). ≥ 70 % = 100 · 50 a 69 % = 55 · < 50 % = 0",
+   "escala": [
+    {
+     "desde": 70,
+     "pts": 100
+    },
+    {
+     "desde": 50,
+     "pts": 55
+    },
+    {
+     "pts": 0
+    }
+   ]
+  },
+  {
+   "id": "g_g_conting",
+   "sp": "ganso",
+   "g": "MBG",
+   "n": "Plan de contingencia para desastres naturales",
+   "ref": "Tabla 57",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Plan escrito e implementado"
+    ],
+    [
+     55,
+     "Plan escrito, pero no implementado"
+    ],
+    [
+     20,
+     "No hay plan escrito, pero se evidencia el conocimiento"
+    ],
+    [
+     0,
+     "No existe plan de contingencia"
+    ]
+   ],
+   "doc": true
+  },
+  {
+   "id": "g_g_sanit",
+   "sp": "ganso",
+   "g": "MBG",
+   "n": "Plan sanitario (prevención y diagnóstico)",
+   "ref": "Tabla 58",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Plan sanitario firmado por MV o MVZ con matrícula vigente y se implementa"
+    ],
+    [
+     0,
+     "No hay evidencia del plan sanitario"
+    ]
+   ],
+   "doc": true
+  },
+  {
+   "id": "g_g_sacreg",
+   "sp": "ganso",
+   "g": "MBG",
+   "n": "Plan de sacrificio humanitario (sistema de registro)",
+   "ref": "Tabla 59",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Hay procedimiento escrito o registro de los sacrificios (o no se sacrificaron gansos en el último año)"
+    ],
+    [
+     0,
+     "No hay procedimiento ni sistema de registro"
+    ]
+   ],
+   "doc": true
+  },
+  {
+   "id": "g_g_ident",
+   "sp": "ganso",
+   "g": "MBG",
+   "n": "Identificación de animales",
+   "ref": "Tabla 60",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Se identifica con métodos sin daño (brazaletes, nombres, microchip) o no se identifica"
+    ],
+    [
+     0,
+     "Se usan tatuajes, hierro caliente o muescas con daño en tejidos"
+    ]
+   ]
+  },
+  {
+   "id": "g_g_capac",
+   "sp": "ganso",
+   "g": "MBG",
+   "n": "Capacitación del personal en bienestar animal",
+   "ref": "Tabla 61",
+   "t": "pct",
+   "un": "% del personal certificado",
+   "esc": "% del personal que certifica su capacitación. > 80 % = 100 · 50 a 80 % = 55 · 20 a 49 % = 20 · < 20 % = 0 (se simplifica la condición de \"demuestra conocimiento\")",
+   "escala": [
+    {
+     "mayor": 80,
+     "pts": 100
+    },
+    {
+     "desde": 50,
+     "pts": 55
+    },
+    {
+     "desde": 20,
+     "pts": 20
+    },
+    {
+     "pts": 0
+    }
+   ],
+   "doc": true
+  },
+  {
+   "id": "g_g_med",
+   "sp": "ganso",
+   "g": "MBG",
+   "n": "Uso responsable de medicamentos e insumos",
+   "ref": "Tabla 62",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Se cumplen todas las buenas prácticas de uso de medicamentos veterinarios"
+    ],
+    [
+     0,
+     "No se cumplen todas las buenas prácticas"
+    ]
+   ],
+   "doc": true
+  },
+  {
+   "id": "g_g_mort",
+   "sp": "ganso",
+   "g": "MBG",
+   "n": "Mortalidad (últimos dos años)",
+   "ref": "Tabla 63",
+   "t": "pct",
+   "un": "% de mortalidad acumulada",
+   "esc": "≤ 3 % con registros escritos = 100 · ≤ 3 % sin registros = 55 · 3 a 5 % = 20 · > 5 % o sin información = 0",
+   "escala": [
+    {
+     "hasta": 3,
+     "x": true,
+     "pts": 100
+    },
+    {
+     "hasta": 3,
+     "pts": 55
+    },
+    {
+     "hasta": 5,
+     "pts": 20
+    },
+    {
+     "pts": 0
+    }
+   ],
+   "usaX": true,
+   "etiquetaX": "Hay registros escritos de mortalidad",
+   "doc": true
+  },
+  {
+   "id": "g_g_prot",
+   "sp": "ganso",
+   "g": "MBG",
+   "n": "Protocolo de sacrificio humanitario",
+   "ref": "Tabla 64",
+   "t": "nivel",
+   "ops": [
+    [
+     100,
+     "Protocolo con método y criterios, firmado por MV/MVZ y acorde con el título 7 de la OMSA"
+    ],
+    [
+     0,
+     "No existe, no está firmado o no es acorde con la OMSA"
+    ]
+   ],
+   "doc": true,
+   "aplica": [
+    {
+     "campo": "sistema",
+     "distinto": "extensivo",
+     "motivo": "Solo aplica a sistemas intensivo y semi-intensivo"
+    }
+   ]
+  }
+ ]
+}
