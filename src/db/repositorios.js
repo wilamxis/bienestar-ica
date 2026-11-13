@@ -7,7 +7,6 @@ const b = v => (v ? 1 : 0);
 
 function crearRepositorios(db) {
   const q = sql => db.prepare(sql);
-  const transaccion = fn => { db.exec('BEGIN'); try { const r = fn(); db.exec('COMMIT'); return r; } catch (e) { db.exec('ROLLBACK'); throw e; } };
 
   const aUsuario = r => r && { id: r.id, nombre: r.nombre, email: r.email, rol: r.rol, activo: !!r.activo, creado: r.creado, _hash: r.hash };
   const aPredio = r => r && { id: r.id, codigo: r.codigo, nombre: r.nombre, ubicacion: r.ubicacion, especie: r.especie, proposito: r.proposito, sistema: r.sistema, nAves: r.n_aves, areaM2: r.area_m2 ?? null, corral: !!r.corral, cama: !!r.cama, estado: r.estado, duenoId: r.dueno_id, duenoNombre: r.dueno_nombre || null, creado: r.creado };
@@ -58,6 +57,9 @@ function crearRepositorios(db) {
     versiones: () => q('SELECT version, creada, creado_por, motivo FROM reglas ORDER BY version DESC').all().map(r => ({ version: r.version, creada: r.creada, creadoPor: r.creado_por, motivo: r.motivo })),
     crear: (json, creadoPor, motivo) => { const n = (q('SELECT MAX(version) AS m FROM reglas').get().m || 0) + 1; q('INSERT INTO reglas(version,creada,creado_por,motivo,json) VALUES(?,?,?,?,?)').run(n, ahora(), creadoPor, motivo, J(json)); return n; }
   };
-  return { usuarios, sesiones, predios, evaluaciones, cambios, reglas, transaccion };
+  const repos = { usuarios, sesiones, predios, evaluaciones, cambios, reglas };
+  // todo ocurre dentro de la misma tarea de Node (SQLite es síncrono), así que la transacción es atómica
+  repos.transaccion = async fn => { db.exec('BEGIN'); try { const r = await fn(repos); db.exec('COMMIT'); return r; } catch (e) { db.exec('ROLLBACK'); throw e; } };
+  return repos;
 }
 module.exports = { crearRepositorios };

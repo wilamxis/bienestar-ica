@@ -3,8 +3,10 @@ const test = require('node:test'), assert = require('node:assert/strict'), http 
 const { JSDOM } = require('jsdom');
 const { crearApp } = require('../src/app'), seed = require('../src/seed');
 let ctx, srv, base;
-test.before(async () => { ctx = await crearApp({ dbPath: ':memory:' }); ctx.app.locals.demo = true; await seed.sembrarDemo(ctx); srv = http.createServer(ctx.app); await new Promise(r => srv.listen(0, r)); base = 'http://localhost:' + srv.address().port; });
-test.after(() => { srv.close(); ctx.cerrar(); });
+const opcionesBd = () => (process.env.TEST_DATABASE_URL ? { databaseUrl: process.env.TEST_DATABASE_URL, reiniciar: true } : { dbPath: ':memory:', databaseUrl: null });   // con TEST_DATABASE_URL se prueba contra PostgreSQL
+
+test.before(async () => { ctx = await crearApp(opcionesBd()); ctx.app.locals.demo = true; await seed.sembrarDemo(ctx); srv = http.createServer(ctx.app); await new Promise(r => srv.listen(0, r)); base = 'http://localhost:' + srv.address().port; });
+test.after(async () => { srv.close(); await ctx.cerrar(); });
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 async function abrir() {
@@ -81,15 +83,15 @@ test('evaluador: flujo completo (crear predio, evaluar, cerrar, corregir, histó
 test('productor: solo consulta sus predios; sin botones ni rutas de edición', async () => {
   const U = await abrir(); await U.login('productor@demo.co');
   assert.deepEqual(U.nav(), ['Inicio', 'Mis predios', 'Reglas']); assert.match(U.app().textContent, /Mis predios/);
-  const pablo = ctx.repos.usuarios.porEmail('productor@demo.co'), suyos = ctx.repos.predios.listar().filter(p => p.duenoId === pablo.id).length;
-  await U.ir('#/predios'); assert.equal(U.app().querySelectorAll('#lista-predios tbody tr').length, suyos, 'solo los predios de este productor'); assert.ok(suyos < ctx.repos.predios.listar().length); assert.ok(!U.app().querySelector('[data-act=form-predio]'), 'sin botón de nuevo predio');
+  const pablo = await ctx.repos.usuarios.porEmail('productor@demo.co'), todosPredios = await ctx.repos.predios.listar(), suyos = todosPredios.filter(p => p.duenoId === pablo.id).length;
+  await U.ir('#/predios'); assert.equal(U.app().querySelectorAll('#lista-predios tbody tr').length, suyos, 'solo los predios de este productor'); assert.ok(suyos < todosPredios.length); assert.ok(!U.app().querySelector('[data-act=form-predio]'), 'sin botón de nuevo predio');
   const ver = U.app().querySelector('#lista-predios a[href^="#/predio/"]'); await U.ir(ver.getAttribute('href'));
   assert.ok(!U.app().querySelector('[data-act=nueva-eval]') && !U.app().querySelector('[data-act=toggle-predio]') && !U.app().querySelector('[data-act=form-predio]'), 'ficha de solo lectura');
   assert.ok(U.app().querySelector('a[href^="#/informe/hist/"]'), 'sí puede pedir informes');
   const ev = U.app().querySelector('a[href^="#/eval/"]'); await U.ir(ev.getAttribute('href')); assert.ok(!/Historial de cambios/.test(U.app().textContent), 'no ve el historial interno'); assert.ok(!U.app().querySelector('[data-act=anular]'));
   await U.ir('#/editar/1'); assert.match(U.app().textContent, /No tiene acceso/);
   await U.ir('#/usuarios'); assert.match(U.app().textContent, /No tiene acceso/);
-  const otro = ctx.repos.predios.listar().find(p => p.codigo === 'P-003'); await U.ir('#/predio/' + otro.id); assert.match(U.app().textContent, /No encontrado/, 'predio de otro productor');
+  const otro = (await ctx.repos.predios.listar()).find(p => p.codigo === 'P-003'); await U.ir('#/predio/' + otro.id); assert.match(U.app().textContent, /No encontrado/, 'predio de otro productor');
   assert.deepEqual(U.errores, []);
 });
 

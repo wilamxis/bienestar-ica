@@ -16,7 +16,8 @@ La primera vez, si la base está vacía, se crea el **modo demostración** con d
 Para un entorno real: `NODE_ENV=production ADMIN_EMAIL=... ADMIN_PASSWORD=... npm start` crea solo el administrador
 (sin datos ni usuarios de demostración) y activa la cookie `Secure` (requiere HTTPS).
 
-Variables: `PORT` (3000), `DB_PATH` (`data/bienestar.db`), `NODE_ENV`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`.
+Variables: `PORT` (3000), `DB_PATH` (`data/bienestar.db`, solo SQLite), `DATABASE_URL` (si existe, usa PostgreSQL en lugar de SQLite),
+`NODE_ENV`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `DEMO` (1 = usuarios y datos de ejemplo).
 
 ## Publicarlo en internet (gratis)
 Vea **DESPLIEGUE.md**: guía paso a paso para Render (gratis), túnel desde su computador y alternativas con datos permanentes.
@@ -62,11 +63,11 @@ guarda la versión con la que se calculó, así que cambiar las reglas no altera
 `src/dominio/reglas_ica_v1.json` (`npm run reglas` lo regenera desde `tests/motor_mvp_original.js`).
 `tests/equivalencia.test.js` comprueba que el motor basado en datos da **los mismos resultados** que el del MVP.
 
-## Cambiar a PostgreSQL
-1. Instale `pg` y cree `src/db/repositoriosPg.js` con las **mismas funciones** que `src/db/repositorios.js`
-   (`usuarios`, `sesiones`, `predios`, `evaluaciones`, `cambios`, `reglas`, `transaccion`), esta vez asíncronas.
-2. En `src/app.js` cambie las dos líneas marcadas con «← para PostgreSQL».
-3. Adapte `src/db/schema.sql` (comentarios al inicio del archivo). Los servicios ya usan `await`, no hay que tocarlos.
+## PostgreSQL
+Ya está implementado: `src/db/conexionPg.js`, `src/db/repositoriosPg.js` y `src/db/schema_pg.sql`. Al definir `DATABASE_URL` el sistema usa
+PostgreSQL (por ejemplo Neon, que tiene plan gratuito); sin ella usa SQLite local. Los servicios son asíncronos y no saben cuál hay debajo.
+Para probar toda la suite contra PostgreSQL: `TEST_DATABASE_URL=postgres://usuario:clave@localhost:5432/prueba npm run test:pg`
+(recrea las tablas de esa base: use una base de pruebas).
 
 ## Seguridad incluida
 Contraseñas con `scrypt` y sal; sesiones con token aleatorio guardado como hash, cookie `HttpOnly` + `SameSite=Lax`;
@@ -77,4 +78,4 @@ cabeceras de seguridad y CSP; sesiones cerradas al desactivar un usuario o cambi
 - Las escalas se transcribieron del documento del ICA v1.0 y deben validarse con el ICA (ver supuestos en la pantalla «Reglas»).
 - Pendiente: recuperación de contraseña por correo, auditoría de inicios de sesión, informe comparativo entre predios,
   respaldo automático de la base, despliegue con HTTPS.
-- `node:sqlite` es un módulo experimental de Node: muestra un aviso al iniciar. Para producción conviene PostgreSQL.
+- `node:sqlite` (modo local) es un módulo experimental de Node: muestra un aviso al iniciar. Para producción use PostgreSQL con `DATABASE_URL`.

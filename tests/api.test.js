@@ -1,6 +1,8 @@
 const test = require('node:test'), assert = require('node:assert/strict'), http = require('http');
 const { crearApp } = require('../src/app'), seed = require('../src/seed'), Motor = require('../src/dominio/motor');
 let ctx, base, srv;
+const opcionesBd = () => (process.env.TEST_DATABASE_URL ? { databaseUrl: process.env.TEST_DATABASE_URL, reiniciar: true } : { dbPath: ':memory:', databaseUrl: null });   // con TEST_DATABASE_URL se prueba contra PostgreSQL
+
 const cliente = () => { let cookie = ''; const f = async (metodo, ruta, cuerpo, extra = {}) => {
   const r = await fetch(base + ruta, { method: metodo, headers: { 'Content-Type': 'application/json', cookie, ...extra }, body: cuerpo ? JSON.stringify(cuerpo) : undefined });
   const sc = r.headers.get('set-cookie'); if (sc) cookie = sc.split(';')[0].startsWith('sid=') && sc.includes('Expires=Thu, 01 Jan 1970') ? '' : sc.split(';')[0];
@@ -8,10 +10,10 @@ const cliente = () => { let cookie = ''; const f = async (metodo, ruta, cuerpo, 
   f.get = (r) => f('GET', r); f.post = (r, b) => f('POST', r, b || {}); f.put = (r, b) => f('PUT', r, b); f.patch = (r, b) => f('PATCH', r, b); f.del = r => f('DELETE', r);
   f.login = async (email, password = 'Demo1234') => f.post('/api/auth/login', { email, password }); return f; };
 test.before(async () => {
-  ctx = await crearApp({ dbPath: ':memory:' }); await seed.sembrarDemo(ctx);
+  ctx = await crearApp(opcionesBd()); await seed.sembrarDemo(ctx);
   srv = http.createServer(ctx.app); await new Promise(r => srv.listen(0, r)); base = 'http://localhost:' + srv.address().port;
 });
-test.after(() => { srv.close(); ctx.cerrar(); });
+test.after(async () => { srv.close(); await ctx.cerrar(); });
 const mejorObs = (R, p) => { const o = {}; for (const i of Motor.indicadoresDe(R, p.especie)) if (!Motor.noAplica(R, i, p)) o[i.id] = Motor.candidatos(R, i, p).find(c => c.pts === 100).obs; return o; };
 const datosPredio = (x = {}) => ({ codigo: 'T-' + Math.random().toString(36).slice(2, 7), nombre: 'Predio de prueba', especie: 'pato', proposito: 'carne', sistema: 'intensivo', nAves: 300, corral: true, cama: true, ...x });
 

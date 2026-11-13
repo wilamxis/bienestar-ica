@@ -11,26 +11,26 @@ module.exports = repos => {
   async function login(email, password) {
     const k = String(email || '').toLowerCase().trim();
     if (bloqueado(k)) throw new ErrorApp(429, 'Demasiados intentos fallidos. Espere unos minutos e intente de nuevo.');
-    const u = repos.usuarios.porEmail(k);
+    const u = await repos.usuarios.porEmail(k);
     if (!u || !u.activo || !verificar(String(password || ''), u._hash)) { const r = intentos.get(k) || { n: 0, t: Date.now() }; r.n++; r.t = Date.now(); intentos.set(k, r); throw new ErrorApp(401, 'Correo o contraseña incorrectos.'); }
-    intentos.delete(k); repos.sesiones.limpiar();
+    intentos.delete(k); await repos.sesiones.limpiar();
     const token = crypto.randomBytes(32).toString('hex');
-    repos.sesiones.crear(sha(token), u.id, new Date(Date.now() + TTL_HORAS * 3600 * 1000).toISOString());
+    await repos.sesiones.crear(sha(token), u.id, new Date(Date.now() + TTL_HORAS * 3600 * 1000).toISOString());
     return { token, ttlMs: TTL_HORAS * 3600 * 1000, usuario: publico(u) };
   }
   const publico = u => ({ id: u.id, nombre: u.nombre, email: u.email, rol: u.rol, activo: u.activo });
   async function usuarioDeToken(token) {
-    if (!token) return null; const s = repos.sesiones.usuarioDe(sha(token));
-    if (!s || !s.usuario.activo || s.expira < new Date().toISOString()) { if (s) repos.sesiones.borrar(sha(token)); return null; }
+    if (!token) return null; const s = await repos.sesiones.usuarioDe(sha(token));
+    if (!s || !s.usuario.activo || s.expira < new Date().toISOString()) { if (s) await repos.sesiones.borrar(sha(token)); return null; }
     return publico(s.usuario);
   }
-  async function logout(token) { if (token) repos.sesiones.borrar(sha(token)); }
+  async function logout(token) { if (token) await repos.sesiones.borrar(sha(token)); }
   async function crearUsuario({ nombre, email, password, rol }, roles) {
     nombre = String(nombre || '').trim(); email = String(email || '').toLowerCase().trim();
     if (!nombre) throw invalido('El nombre es obligatorio.'); if (!emailOk(email)) throw invalido('El correo no es válido.');
     if (!roles.includes(rol)) throw invalido('El rol no es válido.'); if (!claveOk(password)) throw invalido('La contraseña debe tener al menos 8 caracteres, con letras y números.');
-    if (repos.usuarios.porEmail(email)) throw invalido('Ya existe un usuario con ese correo.');
-    return publico(repos.usuarios.crear({ nombre, email, hash: hashPassword(password), rol }));
+    if (await repos.usuarios.porEmail(email)) throw invalido('Ya existe un usuario con ese correo.');
+    return publico(await repos.usuarios.crear({ nombre, email, hash: hashPassword(password), rol }));
   }
   return { login, logout, usuarioDeToken, crearUsuario, hashPassword, claveOk, publico };
 };

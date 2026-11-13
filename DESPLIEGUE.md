@@ -7,7 +7,7 @@ El proyecto usa un servidor Node.js y una base SQLite, así que no se puede publ
 |---|---|---|---|
 | **A. Render (plan gratis) con datos de ejemplo** | $0 | Se pierden al reiniciar; los de ejemplo se recrean solos | Presentación o sustentación con un enlace público |
 | **B. Su computador + túnel gratuito** | $0 | Permanentes (en su equipo) | Mostrarlo en vivo sin depender de un servicio |
-| **C. Render gratis + base Neon (PostgreSQL gratis)** | $0 | Permanentes | Datos que no se pueden perder (requiere un cambio de código, ver abajo) |
+| **C. Render gratis + base Neon (PostgreSQL gratis)** ✔ incluida | $0 | **Permanentes** | Que los datos queden guardados y se vean al volver a abrir |
 | D. Render de pago o servidor propio | Desde unos pocos dólares al mes | Permanentes | Uso real (verifique precios actuales) |
 
 ## Opción A: Render gratis (la más rápida)
@@ -65,14 +65,40 @@ cloudflared tunnel --url http://localhost:3000
 3. Aparece una dirección `https://algo.trycloudflare.com`: compártala. Cambia cada vez que lo reinicia y solo funciona mientras
    el computador y las dos terminales sigan abiertos. Es un servicio pensado para pruebas.
 
-## Opción C: datos permanentes y gratis en la nube
-Combina Render gratis (aplicación) con **Neon** (PostgreSQL gratis, sin tarjeta, 0,5 GB; se suspende tras 5 minutos sin uso y
-despierta en una fracción de segundo). Evite la base gratuita de Render (se elimina a los 30 días) y Supabase gratis (se pausa
-tras una semana sin uso).
+## Opción C: datos permanentes y gratis (Render + Neon)
+El sistema ya incluye soporte para PostgreSQL. Si define la variable `DATABASE_URL`, guarda todo en esa base en lugar de usar un
+archivo local; así los datos **sobreviven** cuando Render duerme o reinicia el servicio. **Neon** ofrece PostgreSQL gratis, sin
+tarjeta, con 0,5 GB. Se suspende tras unos 5 minutos sin uso y despierta en un instante, así que la primera consulta puede
+tardar un poco más. Evite la base gratuita de Render (se elimina a los 30 días) y Supabase gratis (se pausa tras una semana sin uso).
 
-Para esto hay que **cambiar la capa de datos a PostgreSQL**: escribir `src/db/repositoriosPg.js` con las mismas funciones que
-`src/db/repositorios.js` (con la librería `pg`, de forma asíncrona), adaptar los servicios a `await` y crear las tablas en
-Neon. La arquitectura por capas ya lo prevé, pero no está hecho todavía.
+### 1. Actualice el código en GitHub
+Reemplace los archivos del proyecto por los de la versión nueva y, en la terminal dentro de la carpeta `bienestar-ica`:
+```
+git add .
+git commit -m "Soporte para PostgreSQL"
+git push
+```
+
+### 2. Cree la base en Neon
+1. Entre a neon.com y pulse **Sign up** (puede usar su cuenta de GitHub o Google). No pide tarjeta en el plan gratis.
+2. Cree un proyecto (**Create project**): nombre `bienestar-ica`; deje la versión de Postgres por defecto y elija una región cercana a la de su servicio en Render.
+3. En el panel del proyecto pulse **Connect** y copie la **connection string**. Se parece a:
+   `postgresql://usuario:clave@ep-xxxx.region.aws.neon.tech/neondb?sslmode=require`
+   Asegúrese de que incluya la contraseña (use «Show password» si aparece oculta).
+
+### 3. Conéctela a Render
+1. En render.com abra su servicio `bienestar-ica` → **Environment**.
+2. **Add Environment Variable**: Key `DATABASE_URL`, Value: la connection string completa. Guarde. Render vuelve a desplegar solo.
+3. En **Logs** debe aparecer: `Sistema experto de bienestar animal en el puerto ... · base de datos: PostgreSQL`.
+
+La primera vez, con `DEMO=1`, se crean los usuarios y datos de ejemplo **una sola vez**; los reinicios siguientes no los vuelven a crear ni borran lo que usted agregue.
+
+### 4. Compruebe que se guarda
+1. Entre con `evaluador@demo.co` y cree un predio.
+2. En Render pulse **Manual Deploy → Restart service** (o espere a que se duerma y vuelva a abrir la página).
+3. Entre de nuevo: el predio debe seguir ahí.
+
+**Cuidado:** la connection string es un secreto. Péguela solo en las variables de Render; nunca en GitHub ni en capturas.
 
 ## Opción D: pago o servidor propio
 - Render de pago con disco persistente, o un servidor virtual con Docker (`Dockerfile` y `deploy/docker-compose.yml`, con HTTPS
@@ -82,5 +108,5 @@ Neon. La arquitectura por capas ya lo prevé, pero no está hecho todavía.
 ## Lista de verificación de seguridad
 - [ ] En un uso real, no definir `DEMO` y crear el administrador con `ADMIN_EMAIL` y `ADMIN_PASSWORD`.
 - [ ] La dirección debe ser `https://` (Render la da automáticamente).
-- [ ] No subir `.env` ni archivos `.db` a GitHub.
+- [ ] No subir `.env`, archivos `.db` ni la `DATABASE_URL` a GitHub.
 - [ ] Respaldar `data/bienestar.db` si los datos importan (en la opción B).

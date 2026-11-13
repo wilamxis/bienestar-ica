@@ -1,5 +1,5 @@
 # Blueprint de Render, variante GRATUITA para demostración.
-# El disco gratuito es efímero: los datos se pierden cuando el servicio se reinicia o se duerme.
+# Sin DATABASE_URL el disco gratuito es efímero (los datos se pierden al reiniciar). Con DATABASE_URL (Neon) los datos son permanentes.
 # Con DEMO=1 los datos y usuarios de ejemplo se recrean solos en cada arranque.
 services:
   - type: web
@@ -16,3 +16,5 @@ services:
         value: production
       - key: DEMO
         value: "1"
+      - key: DATABASE_URL   # pegue la connection string de Neon (datos permanentes)
+        sync: false

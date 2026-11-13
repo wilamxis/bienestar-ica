@@ -4,8 +4,11 @@ const { abrir } = require('./db/conexion'), { crearRepositorios } = require('./d
 const seg = require('./middleware/seguridad');
 const wrap = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
-async function crearApp({ dbPath = process.env.DB_PATH || path.join(__dirname, '../data/bienestar.db'), produccion = process.env.NODE_ENV === 'production', demo = false } = {}) {
-  const db = abrir(dbPath), repos = crearRepositorios(db);                       // ← para PostgreSQL: cambiar estas dos líneas
+async function crearApp({ dbPath = process.env.DB_PATH || path.join(__dirname, '../data/bienestar.db'), databaseUrl = process.env.DATABASE_URL, reiniciar = false, produccion = process.env.NODE_ENV === 'production', demo = false } = {}) {
+  // Con DATABASE_URL se usa PostgreSQL (datos permanentes en la nube); si no, SQLite local
+  let repos, cerrarBd;
+  if (databaseUrl) { const pg = await require('./db/conexionPg').abrir(databaseUrl, { reiniciar }); repos = pg.repos; cerrarBd = pg.cerrar; }
+  else { const db = abrir(dbPath); repos = crearRepositorios(db); cerrarBd = () => db.close(); }
   const reglas = require('./servicios/reglaService')(repos), auth = require('./servicios/authService')(repos);
   const predios = require('./servicios/predioService')(repos), evaluaciones = require('./servicios/evaluacionService')(repos, reglas, predios);
   const usuarios = require('./servicios/usuarioService')(repos, auth), tablero = require('./servicios/tableroService')(repos, predios);
@@ -14,7 +17,7 @@ async function crearApp({ dbPath = process.env.DB_PATH || path.join(__dirname, '
 
   const app = express(); app.disable('x-powered-by');
   if (produccion) app.set('trust proxy', 1);   // detrás del proxy del proveedor (HTTPS)
-  app.get('/salud', (_req, res) => { try { repos.reglas.actual(); res.json({ ok: true }); } catch (e) { res.status(503).json({ ok: false }); } });   // chequeo de salud para el hosting
+  app.get('/salud', async (_req, res) => { try { await repos.reglas.actual(); res.json({ ok: true }); } catch (e) { res.status(503).json({ ok: false }); } });   // chequeo de salud para el hosting
   app.use(seg.cabeceras, express.json({ limit: '1mb' }), seg.cookies, seg.mismoOrigen);
   const api = express.Router(), A = seg.autenticar(auth), R = seg.requiere;
   api.get('/auth/config', C.auth.config); api.post('/auth/login', wrap(C.auth.login)); api.post('/auth/logout', wrap(C.auth.logout)); api.get('/auth/yo', A, C.auth.yo);
@@ -36,6 +39,6 @@ async function crearApp({ dbPath = process.env.DB_PATH || path.join(__dirname, '
   app.get('/js/motor.js', (_req, res) => res.type('js').sendFile(path.join(__dirname, 'dominio/motor.js')));   // el MISMO motor corre en el navegador (vista previa)
   app.use(express.static(path.join(__dirname, '../public')));
   app.use(seg.errores);
-  return { app, repos, servicios: { reglas, auth, predios, evaluaciones, usuarios, tablero }, cerrar: () => db.close() };
+  return { app, repos, servicios: { reglas, auth, predios, evaluaciones, usuarios, tablero }, motorBd: databaseUrl ? 'PostgreSQL' : 'SQLite', cerrar: cerrarBd };
 }
 module.exports = { crearApp };

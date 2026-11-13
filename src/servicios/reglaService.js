@@ -4,19 +4,19 @@ const Motor = require('../dominio/motor'), { invalido } = require('../errores');
 module.exports = repos => {
   let cache = null;
   const refrescar = () => { cache = null; };
-  const actual = async () => cache || (cache = repos.reglas.actual());
+  const actual = async () => { if (!cache) cache = await repos.reglas.actual(); return cache; };
   const motivoOk = m => { if (typeof m !== 'string' || m.trim().length < 5) throw invalido('Indique el motivo del cambio (mínimo 5 caracteres).'); return m.trim(); };
   async function inicializar() {
-    if (repos.reglas.actual()) return;
+    if (await repos.reglas.actual()) return;
     const R = JSON.parse(fs.readFileSync(path.join(__dirname, '../dominio/reglas_ica_v1.json'), 'utf8'));
     const err = Motor.validarReglas(R); if (err.length) throw new Error('Reglas iniciales inválidas: ' + err.join(' '));
-    repos.reglas.crear(R, 'sistema', 'Carga inicial: metodología ICA 2024 v1.0'); refrescar();
+    await repos.reglas.crear(R, 'sistema', 'Carga inicial: metodología ICA 2024 v1.0'); refrescar();
   }
   async function porVersion(v) { return repos.reglas.porVersion(v); }
   async function publicar(usuario, nuevas, motivo, detalleCambio) {
     const err = Motor.validarReglas(nuevas); if (err.length) throw invalido('Las reglas resultantes no son válidas.', err);
-    const v = repos.reglas.crear(nuevas, usuario.nombre, motivo);
-    repos.cambios.registrar({ entidad: 'reglas', refId: v, usuarioId: usuario.id, usuarioNombre: usuario.nombre, campo: detalleCambio, antes: 'versión ' + (v - 1), despues: 'versión ' + v, motivo });
+    const v = await repos.reglas.crear(nuevas, usuario.nombre, motivo);
+    await repos.cambios.registrar({ entidad: 'reglas', refId: v, usuarioId: usuario.id, usuarioNombre: usuario.nombre, campo: detalleCambio, antes: 'versión ' + (v - 1), despues: 'versión ' + v, motivo });
     refrescar(); return v;
   }
   const PERMITIDOS = { nivel: ['n', 'ref', 'ops'], pct: ['n', 'ref', 'esc', 'un', 'escala', 'etiquetaX'], dens: ['n', 'ref', 'esc'], cc: ['n', 'ref', 'esc', 'tabla'] };
